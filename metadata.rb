@@ -1,0 +1,7 @@
+name             'iptables-web-cookbook'
+maintainer       'YOUR_NAME'
+maintainer_email 'YOUR_EMAIL'
+license          'All rights reserved'
+description      'Installs/Configures iptables-web-cookbook'
+long_description 'Installs/Configures iptables-web-cookbook'
+version          '0.1.0'
