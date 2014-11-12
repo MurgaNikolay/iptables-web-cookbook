@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'berkshelf'
+# gem 'berkshelf'
 
 # Uncomment these lines if you want to live on the Edge:
 #
@@ -14,3 +14,6 @@ gem 'berkshelf'
 #   gem "vagrant-omnibus", github: "schisamo/vagrant-omnibus"
 # end
 
+group :development do
+  gem 'chef'
+end

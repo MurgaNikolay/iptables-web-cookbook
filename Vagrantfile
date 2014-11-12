@@ -18,9 +18,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #
   #   $ vagrant plugin install vagrant-omnibus
   #
-  if Vagrant.has_plugin?
-    config.omnibus.chef_version = 'latest'
-  end
+  # if Vagrant.has_plugin?('Omnibus')
+  config.omnibus.chef_version = :latest
+  # end
 
   # Every Vagrant virtual environment requires a box to build off of.
   # If this value is a shorthand to a box in Vagrant Cloud then
@@ -75,6 +75,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.berkshelf.except = []
 
   config.vm.provision :chef_solo do |chef|
+    chef.log_level = :debug
     chef.json = {
       mysql: {
         server_root_password: 'rootpass',
@@ -82,9 +83,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         server_repl_password: 'replpass'
       }
     }
-
-    chef.run_list = [
-      'recipe[iptables-web-cookbook::default]'
-    ]
+    chef.run_list = %w(recipe[mysql::server] recipe[database::mysql] recipe[iptables-web::default])
   end
 end

@@ -1,7 +1,16 @@
-name             'iptables-web-cookbook'
-maintainer       'YOUR_NAME'
-maintainer_email 'YOUR_EMAIL'
+name             'iptables-web'
+maintainer       'Nikolay Murga'
+maintainer_email 'nikolay.m@randrmusic.com'
 license          'All rights reserved'
 description      'Installs/Configures iptables-web-cookbook'
 long_description 'Installs/Configures iptables-web-cookbook'
 version          '0.1.0'
+
+
+depends          'mysql'
+depends          'database'
+depends          'rvm'
+depends          'nginx'
+depends          'unicorn'
+
+

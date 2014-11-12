@@ -1,0 +1,8 @@
+<%= node[:iptables_web][:web][:rails_env]%>:
+  adapter: 'mysql2'
+  encoding: utf8
+  database: <%= node[:iptables_web][:web][:database][:name] %>
+  host: <%= node[:iptables_web][:web][:database][:host] %>
+  username: <%= node[:iptables_web][:web][:database][:username] %>
+  password: <%= node[:iptables_web][:web][:database][:password] %>
+
