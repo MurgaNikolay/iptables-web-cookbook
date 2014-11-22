@@ -1,4 +1,4 @@
-name             'iptables-web'
+name             'iptables_web'
 maintainer       'Nikolay Murga'
 maintainer_email 'nikolay.m@randrmusic.com'
 license          'All rights reserved'
@@ -12,5 +12,8 @@ depends          'database'
 depends          'rvm'
 depends          'nginx'
 depends          'unicorn'
+depends          'sudo'
+# depends          'elasticsearch'
+
 
 

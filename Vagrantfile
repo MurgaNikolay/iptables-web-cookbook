@@ -32,7 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # via the IP. Host-only networks can talk to the host machine as well as
   # any other machines on the same network, but cannot be accessed (through this
   # network interface) by any external networks.
-  config.vm.network :private_network, type: 'dhcp'
+  config.vm.network :private_network, type: 'dhcp', ip: "172.28.128.3"
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -81,8 +81,24 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         server_root_password: 'rootpass',
         server_debian_password: 'debpass',
         server_repl_password: 'replpass'
+      },
+      iptables_web: {
+        server: {
+          # fqdn: '172.28.128.3',
+          google: {
+            key: '91199367367-isnbm000dii328s63tlk5h8niendtjr2.apps.googleusercontent.com',
+            secret: '_cI_NqKLd4ipt4tkk7wwdj3a',
+            domains: %w(randrmusic.com tunehog.com example.com)
+          }
+        }
       }
     }
-    chef.run_list = %w(recipe[mysql::server] recipe[database::mysql] recipe[iptables-web::default])
+    chef.run_list = %w(
+    recipe[mysql::server]
+    recipe[database::mysql]
+    recipe[iptables_web::server]
+    recipe[iptables_web::client]
+    recipe[iptables_web::client_register]
+)
   end
 end
