@@ -14,16 +14,6 @@ directory node.iptables_web[:server][:deploy_to] do
   action :create
 end
 
-['tmp/sockets', 'tmp/pids'].each do |dir|
-  directory File.join node.iptables_web[:server][:deploy_to], dir do
-    owner node.iptables_web[:server][:user]
-    group node.iptables_web[:server][:group]
-    recursive true
-    mode '0755'
-    action :create
-  end
-end
-
 # #clone code
 _git = git node.iptables_web[:server][:deploy_to] do
   repository node.iptables_web[:server][:repo]
@@ -31,6 +21,16 @@ _git = git node.iptables_web[:server][:deploy_to] do
   action :sync
   user node.iptables_web[:server][:user]
   group node.iptables_web[:server][:group]
+end
+
+%w(tmp/sockets tmp/pids).each do |dir|
+  directory File.join node.iptables_web[:server][:deploy_to], dir do
+    owner node.iptables_web[:server][:user]
+    group node.iptables_web[:server][:group]
+    recursive true
+    mode '0755'
+    subscribes :create, _git, :immediately
+  end
 end
 
 template "#{node.iptables_web[:server][:deploy_to]}/config/database.yml" do
