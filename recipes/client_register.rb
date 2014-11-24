@@ -7,5 +7,5 @@ iptables_web_client node[:machinename] do
   user node[:iptables_web][:client][:user]
   group node[:iptables_web][:client][:group]
   action :configure
-  not_if "test -f #{::File.join(Etc.getpwnam(node[:iptables_web][:client][:user]).dir, '.iptables-web', 'config.yml')}"
+  not_if "test -f #{::File.join('/home', node[:iptables_web][:client][:user], '.iptables-web', 'config.yml')}"
 end

@@ -4,5 +4,4 @@ if node[:iptables_web][:server][:install_method]
 else
    include_recipe 'iptables_web::server_system_ruby'
 end
-
 include_recipe 'iptables_web::server_nginx'

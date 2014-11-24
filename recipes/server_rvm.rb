@@ -31,7 +31,7 @@ end
 pid = File.join(node[:iptables_web][:server][:deploy_to], 'tmp', 'pids', 'unicorn.pid')
 
 _environment ={
-  'HOME' => Etc.getpwnam(node[:iptables_web][:server][:user]).dir,
+  'HOME' => File.join('/home', node[:iptables_web][:server][:user]),
   'USER' => node[:iptables_web][:server][:user],
   'RAILS_ENV' => node[:iptables_web][:server][:rails_env]
 }
@@ -85,7 +85,6 @@ execute 'iptables_web:unicorn:start' do
   subscribes :run, 'execute[iptables_web:assets:precompile]', :immediately
   not_if "test -f #{pid}"
 end
-
 
 execute 'iptables_web:unicorn:reload' do
   command "kill -HUP $(cat #{pid})"
