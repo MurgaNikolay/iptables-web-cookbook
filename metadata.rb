@@ -13,6 +13,9 @@ depends          'rvm'
 depends          'nginx'
 depends          'unicorn'
 depends          'sudo'
+depends          'git'
+depends          'apt'
+
 # depends          'elasticsearch'
 
 

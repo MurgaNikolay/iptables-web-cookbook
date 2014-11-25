@@ -6,8 +6,8 @@ use_inline_resources
 
 action :configure do
   require 'rest_client'
-  if Chef::Config[:solo]
-    if node[:iptables_web][:server][:fqdn]
+  if Chef::Config['solo']
+    if node['iptables_web']['server']['fqdn']
       server_node = node
     else
       Chef::Log.warn('This recipe uses search. Chef Solo does not support search.')
@@ -15,11 +15,11 @@ action :configure do
       return
     end
   else
-    server_node = search(:node, 'recipe:iptables_web\\:\\:server').first
+    server_node = search(:node, 'recipe:iptables_web\:\:server OR recipes:iptables_web\:\:server').first
   end
 
-  server_base_url = server_node[:iptables_web][:server][:ssl] ? 'https://' : 'http://'
-  server_base_url << server_node[:iptables_web][:server][:fqdn]
+  server_base_url = server_node['iptables_web']['server']['ssl'] ? 'https://' : 'http://'
+  server_base_url << server_node['iptables_web']['server']['fqdn']
   server = ::File.join(server_base_url, 'api', 'registration.json')
   Chef::Log.info "Register node #{new_resource.name} on #{server}"
   result = RestClient.post(server,

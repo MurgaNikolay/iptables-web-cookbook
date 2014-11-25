@@ -1,4 +1,4 @@
-source "http://localhost:26200"
+site :opscode
 metadata
 
 #cookbook "rvm", git: 'git@github.com:MurgaNikolay/chef-rvm.git', ref: "master"
