@@ -15,7 +15,6 @@ depends          'unicorn'
 depends          'sudo'
 depends          'git'
 depends          'apt'
-depends          'hostsfile'
 
 # depends          'elasticsearch'
 
