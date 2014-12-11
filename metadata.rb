@@ -9,12 +9,13 @@ version          '0.1.0'
 
 depends          'mysql'
 depends          'database'
-depends          'rvm'
+depends          'ruby_rvm'
 depends          'nginx'
 depends          'unicorn'
 depends          'sudo'
 depends          'git'
 depends          'apt'
+depends          'hostsfile'
 
 # depends          'elasticsearch'
 

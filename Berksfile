@@ -1,6 +1,6 @@
-site :opscode
+source "https://supermarket.getchef.com"
 metadata
 
-#cookbook "rvm", git: 'git@github.com:MurgaNikolay/chef-rvm.git', ref: "master"
-cookbook "rvm", path: '../chef-rvm'
+cookbook "ruby_rvm"
+
 

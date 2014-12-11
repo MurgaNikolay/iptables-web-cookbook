@@ -22,7 +22,7 @@ default['iptables_web']['server']['registration']['token'] = 'usertoken'
 
 #nginx
 default['iptables_web']['server']['fqdn'] = 'access.example.com'
-default['iptables_web']['server']['port'] = '80'
+default['iptables_web']['server']['listen'] = '80'
 default['iptables_web']['server']['ssl'] = false
 # default['iptables_web']['server']['ssl'] = true
 # default['iptables_web']['server']['ssl'] = true

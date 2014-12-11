@@ -19,11 +19,5 @@ end
 nginx_site 'iptables_web'
 
 
-unicorn_config File.join(node['iptables_web']['server']['deploy_to'], 'config', 'unicorn.rb') do
-  listen({socket => {}})
-  pid File.join(node['iptables_web']['server']['deploy_to'], 'tmp', 'pids', 'unicorn.pid')
-  working_directory node['iptables_web']['server']['deploy_to']
-  owner node['iptables_web']['server']['user']
-  group node['iptables_web']['server']['group']
-end
+
 

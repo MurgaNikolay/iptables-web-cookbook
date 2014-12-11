@@ -1,11 +1,5 @@
 include_recipe 'git'
-user node['iptables_web']['server']['user'] do
-  home "/home/#{node['iptables_web']['server']['user']}"
-  shell '/bin/bash'
-  supports :manage_home => true
-  action :create
-  system true
-end
+
 
 directory node['iptables_web']['server']['deploy_to'] do
   owner node['iptables_web']['server']['user']
@@ -15,7 +9,7 @@ directory node['iptables_web']['server']['deploy_to'] do
   action :create
 end
 
-# #clone code
+#clone code
 _git = git node['iptables_web']['server']['deploy_to'] do
   repository node['iptables_web']['server']['repo']
   revision node['iptables_web']['server']['revision']
@@ -24,26 +18,37 @@ _git = git node['iptables_web']['server']['deploy_to'] do
   group node['iptables_web']['server']['group']
 end
 
-%w(tmp/sockets tmp/pids).each do |dir|
+%w(tmp tmp/sockets tmp/pids).each do |dir|
   directory File.join node['iptables_web']['server']['deploy_to'], dir do
     owner node['iptables_web']['server']['user']
     group node['iptables_web']['server']['group']
-    recursive true
+    # recursive true
     mode '0755'
     subscribes :create, _git, :immediately
   end
 end
 
-template "#{node['iptables_web']['server']['deploy_to']}/config/database.yml" do
-  source 'database.yml.erb'
-  subscribes :create, _git, :immediately
-  notifies :run, 'execute[iptables_web:unicorn:reload]', :delayed
+socket = File.join(node['iptables_web']['server']['deploy_to'], 'tmp', 'sockets', 'unicorn.socket')
+unicorn_config File.join(node['iptables_web']['server']['deploy_to'], 'config', 'unicorn.rb') do
+  listen({socket => {}})
+  pid File.join(node['iptables_web']['server']['deploy_to'], 'tmp', 'pids', 'unicorn.pid')
+  stderr_path File.join(node['iptables_web']['server']['deploy_to'], 'log', "#{node['iptables_web']['server']['rails_env']}.log")
+  stdout_path File.join(node['iptables_web']['server']['deploy_to'], 'log', "#{node['iptables_web']['server']['rails_env']}.log")
+  working_directory node['iptables_web']['server']['deploy_to']
+  owner node['iptables_web']['server']['user']
+  group node['iptables_web']['server']['group']
 end
 
-template "#{node['iptables_web']['server']['deploy_to']}/config/settings.yml" do
+template 'iptables_web:config:database' do
+  path "#{node['iptables_web']['server']['deploy_to']}/config/database.yml"
+  source 'database.yml.erb'
+  subscribes :create, _git, :immediately
+end
+
+template 'iptables_web:config:settings' do
+  path "#{node['iptables_web']['server']['deploy_to']}/config/settings.yml"
   source 'settings.yml.erb'
   subscribes :create, _git,  :immediately
-  notifies :run, 'execute[iptables_web:unicorn:reload]', :delayed
 end
 
 unless node['mysql']['server_root_password']
@@ -56,7 +61,6 @@ root_connection = {
   :username => 'root',
   :password => node['mysql']['server_root_password']
 }
-
 
 mysql_database node['iptables_web']['server']['database']['name'] do
   connection root_connection

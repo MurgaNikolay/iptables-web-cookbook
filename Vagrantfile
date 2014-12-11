@@ -32,7 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # via the IP. Host-only networks can talk to the host machine as well as
   # any other machines on the same network, but cannot be accessed (through this
   # network interface) by any external networks.
-  config.vm.network :private_network, type: 'dhcp', ip: "172.28.128.3"
+  config.vm.network :private_network, type: 'dhcp', ip: '192.168.23.10'
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -48,13 +48,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-  # config.vm.provider :virtualbox do |vb|
-  #   # Don't boot with headless mode
-  #   vb.gui = true
-  #
-  #   # Use VBoxManage to customize the VM. For example to change memory:
-  #   vb.customize ["modifyvm", :id, "--memory", "1024"]
-  # end
+  config.vm.provider :virtualbox do |vb|
+    vb.cpus = 2
+    # Don't boot with headless mode
+    # vb.gui = true
+
+    # Use VBoxManage to customize the VM. For example to change memory:
+    # vb.customize ["modifyvm", :id, "--memory", "1024"]
+  end
   #
   # View the documentation for the provider you're using for more
   # information on available options.
@@ -95,11 +96,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       }
     }
     chef.run_list = %w(
-    recipe[mysql::server]
-    recipe[database::mysql]
-    recipe[iptables_web::server]
-    recipe[iptables_web::client]
-    recipe[iptables_web::client_register]
-)
+      recipe[mysql::server]
+      recipe[database::mysql]
+      recipe[iptables_web::server]
+
+    )
   end
 end
