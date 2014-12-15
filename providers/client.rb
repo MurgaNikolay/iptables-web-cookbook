@@ -18,6 +18,7 @@ action :configure do
     server_node = search(:node, 'recipe:iptables_web\:\:server OR recipes:iptables_web\:\:server').first
   end
 
+  puts server_node
   server_base_url = server_node['iptables_web']['server']['ssl'] ? 'https://' : 'http://'
   server_base_url << server_node['iptables_web']['server']['fqdn']
   server = ::File.join(server_base_url, 'api', 'registration.json')

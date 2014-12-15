@@ -1,6 +1,5 @@
 include_recipe 'git'
 
-
 directory node['iptables_web']['server']['deploy_to'] do
   owner node['iptables_web']['server']['user']
   group node['iptables_web']['server']['group']
