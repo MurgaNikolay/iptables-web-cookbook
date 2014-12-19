@@ -20,3 +20,9 @@ sudo node['iptables_web']['client']['user'] do
   commands  ['/sbin/iptables-restore']
   nopasswd true
 end
+
+directory ::File.join(Etc.getpwnam(node['iptables_web']['client']['user']).dir, '.iptables-web')  do
+  mode '0700'
+  owner node['iptables_web']['client']['user']
+  group node['iptables_web']['client']['group']
+end

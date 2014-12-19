@@ -4,7 +4,11 @@ end
 include IptablesWebClientHelpers
 use_inline_resources
 
-action :configure do
+action :register do
+  if File.exist?(::File.join(new_resource.config_dir, 'config.yml'))
+    Chef::Log.info('Skip register action because node already registered!')
+    return nil
+  end
   require 'rest_client'
   if Chef::Config['solo']
     if node['iptables_web']['server']['fqdn']
@@ -18,27 +22,21 @@ action :configure do
     server_node = search(:node, 'recipe:iptables_web\:\:server OR recipes:iptables_web\:\:server').first
   end
 
-  puts server_node
   server_base_url = server_node['iptables_web']['server']['ssl'] ? 'https://' : 'http://'
   server_base_url << server_node['iptables_web']['server']['fqdn']
   server = ::File.join(server_base_url, 'api', 'registration.json')
   Chef::Log.info "Register node #{new_resource.name} on #{server}"
+
   result = RestClient.post(server,
-    {node: {name: new_resource.name}}.to_json,
+    { node: {name: new_resource.name}}.to_json,
     {
       content_type: :json,
       accept: :json,
-      'X-Authentication-Key' => new_resource.registration_key,
-      'X-Authentication-Token' => new_resource.registration_token
+      'X-Authentication-Key' => server_node['iptables_web']['server']['registration']['token'],
+      'X-Authentication-Token' => server_node['iptables_web']['server']['registration']['key']
     }
   )
   responce = JSON.parse(result.body)
-
-  directory new_resource.config_dir do
-    mode '0700'
-    owner new_resource.user
-    group new_resource.group
-  end
 
   template ::File.join(new_resource.config_dir, 'config.yml') do
     source 'client_config.yml.erb'
@@ -55,7 +53,17 @@ action :configure do
     action :create
     user new_resource.user
     home new_resource.user_home
-    command shell_command("cd #{new_resource.config_dir} && sudo iptables-restore -C < iptables-web")
+    command shell_command("iptables-web")
+  end
+end
+
+
+action :configure do
+  file ::File.join(new_resource.config_dir, 'config.yml') do
+    content new_resource.static_rules.join("\n")
+    owner new_resource.user
+    group new_resource.group
+    mode '0600'
   end
 end
 

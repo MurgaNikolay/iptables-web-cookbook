@@ -20,7 +20,7 @@ ruby_rvm_gemset 'iptables_web:gemset' do
 end
 
 ruby_rvm_gem 'iptables_web::gem::iptables_web' do
-  gem 'iptables_web'
+  gem 'iptables-web'
   user node['iptables_web']['client']['user']
   ruby_string _ruby_string
   action :install
