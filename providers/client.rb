@@ -5,7 +5,7 @@ include IptablesWebClientHelpers
 use_inline_resources
 
 action :register do
-  if File.exist?(::File.join(new_resource.config_dir, 'config.yml'))
+  if ::File.exist?(::File.join(new_resource.config_dir, 'config.yml'))
     Chef::Log.info('Skip register action because node already registered!')
     return nil
   end
