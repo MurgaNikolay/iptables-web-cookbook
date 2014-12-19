@@ -5,5 +5,5 @@ iptables_web_client node['machinename'] do
   static_rules node['iptables_web']['client']['static_rules']
   user node['iptables_web']['client']['user']
   group node['iptables_web']['client']['group']
-  action :register, :configure
+  action [:register, :configure]
 end

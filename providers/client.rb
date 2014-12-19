@@ -32,8 +32,8 @@ action :register do
     {
       content_type: :json,
       accept: :json,
-      'X-Authentication-Key' => server_node['iptables_web']['server']['registration']['token'],
-      'X-Authentication-Token' => server_node['iptables_web']['server']['registration']['key']
+      'X-Authentication-Key' => server_node['iptables_web']['server']['registration']['key'],
+      'X-Authentication-Token' => server_node['iptables_web']['server']['registration']['token']
     }
   )
   responce = JSON.parse(result.body)
@@ -59,7 +59,7 @@ end
 
 
 action :configure do
-  file ::File.join(new_resource.config_dir, 'config.yml') do
+  file ::File.join(new_resource.config_dir, 'static_rules') do
     content new_resource.static_rules.join("\n")
     owner new_resource.user
     group new_resource.group
