@@ -3,6 +3,7 @@ default['iptables_web']['server']['revision'] = 'master'
 default['iptables_web']['server']['rails_env'] = 'production'
 default['iptables_web']['server']['user'] = 'iptables_web'
 default['iptables_web']['server']['group'] = 'iptables_web'
+default['iptables_web']['server']['tag'] = 'production'
 
 #RVM
 default['iptables_web']['server']['install_method'] = 'rvm'

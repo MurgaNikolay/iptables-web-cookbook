@@ -7,7 +7,7 @@ use_inline_resources
 action :register do
   if ::File.exist?(::File.join(new_resource.config_dir, 'config.yml'))
     Chef::Log.info('Skip register action because node already registered!')
-    return nil
+    next
   end
   require 'rest_client'
   if Chef::Config['solo']
@@ -28,7 +28,14 @@ action :register do
   Chef::Log.info "Register node #{new_resource.name} on #{server}"
 
   result = RestClient.post(server,
-    { node: {name: new_resource.name}}.to_json,
+    {
+      node: {
+        name: new_resource.name,
+        security_groups: new_resource.security_groups,
+        access_rules: new_resource.access_rules,
+        groups_access_rules: new_resource.groups_access_rules
+      }
+    }.to_json,
     {
       content_type: :json,
       accept: :json,
@@ -56,15 +63,4 @@ action :register do
     command shell_command("iptables-web")
   end
 end
-
-
-action :configure do
-  file ::File.join(new_resource.config_dir, 'static_rules') do
-    content new_resource.static_rules.join("\n")
-    owner new_resource.user
-    group new_resource.group
-    mode '0600'
-  end
-end
-
 
