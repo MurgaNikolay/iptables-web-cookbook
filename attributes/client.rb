@@ -14,7 +14,7 @@ default['iptables_web']['client']['static_rules'] = [
   '-A FORWARD -m state --state ESTABLISHED,RELATED -j ACCEPT'
 ]
 
-node['iptables_web']['client']['registration']['server_tag'] = 'production'
-node['iptables_web']['client']['registration']['access_rules'] = []
-node['iptables_web']['client']['registration']['groups_access_rules'] = []
-node['iptables_web']['client']['registration']['security_groups'] = []
+default['iptables_web']['client']['registration']['server_tag'] = 'production'
+default['iptables_web']['client']['registration']['access_rules'] = []
+default['iptables_web']['client']['registration']['groups_access_rules'] = []
+default['iptables_web']['client']['registration']['security_groups'] = []
