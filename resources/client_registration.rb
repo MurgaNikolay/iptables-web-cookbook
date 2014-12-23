@@ -7,6 +7,7 @@ attribute :group, :kind_of => [String]
 attribute :security_groups, :kind_of => [Array]
 attribute :access_rules, :kind_of => [Array]
 attribute :groups_access_rules, :kind_of => [Array]
+attribute :client_node, default: node
 
 def config_dir
   ::File.join(user_home, '.iptables-web')

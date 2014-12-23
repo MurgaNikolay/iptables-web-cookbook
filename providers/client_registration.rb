@@ -44,23 +44,8 @@ action :register do
     }
   )
   responce = JSON.parse(result.body)
-
-  template ::File.join(new_resource.config_dir, 'config.yml') do
-    source 'client_config.yml.erb'
-    owner new_resource.user
-    group new_resource.group
-    mode '0600'
-    variables ({
-        base_url: server_base_url,
-        access_token: responce['node']['token']
-      })
-  end
-
-  cron 'iptables_web' do
-    action :create
-    user new_resource.user
-    home new_resource.user_home
-    command shell_command("iptables-web")
-  end
+  # Store access token to node
+  new_resource.client_node.normal['iptables_web']['client']['server_base_url'] = server_base_url
+  new_resource.client_node.normal['iptables_web']['client']['access_token'] = responce['node']['token']
 end
 
