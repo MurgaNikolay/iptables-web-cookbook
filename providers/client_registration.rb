@@ -2,6 +2,7 @@ def whyrun_supported?
   true
 end
 include IptablesWebClientHelpers
+include Chef::DSL::IncludeRecipe
 use_inline_resources
 
 action :register do
@@ -43,5 +44,6 @@ action :register do
   # Store access token to node
   new_resource.client_node.normal['iptables_web']['client']['server_base_url'] = server_base_url
   new_resource.client_node.normal['iptables_web']['client']['access_token'] = responce['node']['token']
+  include_recipe 'iptables_web::client_configuration'
 end
 
