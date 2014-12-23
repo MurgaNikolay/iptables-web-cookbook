@@ -4,4 +4,4 @@ if node['iptables_web']['client']['install_method'] == 'rvm'
 else
   include_recipe 'iptables_web::client_system_ruby'
 end
-# include_recipe 'iptables_web::client_register'
+include_recipe 'iptables_web::client_configuration'
