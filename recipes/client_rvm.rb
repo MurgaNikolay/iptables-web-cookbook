@@ -23,5 +23,5 @@ ruby_rvm_gem 'iptables_web::gem::iptables_web' do
   gem 'iptables-web'
   user node['iptables_web']['client']['user']
   ruby_string _ruby_string
-  action :install
+  action [ :install, :update ]
 end
