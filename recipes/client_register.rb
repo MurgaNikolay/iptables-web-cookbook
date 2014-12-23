@@ -8,6 +8,6 @@ iptables_web_client_registration node['machinename'] do
   client_node node
   user node['iptables_web']['client']['user']
   group node['iptables_web']['client']['group']
-  not_if node['iptables_web']['client']['access_token']
+  not_if { node['iptables_web']['client']['access_token'] }
   action :register
 end

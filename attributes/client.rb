@@ -15,8 +15,8 @@ default['iptables_web']['client']['static_rules'] = [
 ]
 
 
-default['iptables_web']['client']['server_base_url'] = ''
-default['iptables_web']['client']['access_token'] = ''
+default['iptables_web']['client']['server_base_url'] = nil
+default['iptables_web']['client']['access_token'] = nil
 default['iptables_web']['client']['registration']['server_tag'] = 'production'
 default['iptables_web']['client']['registration']['access_rules'] = []
 default['iptables_web']['client']['registration']['groups_access_rules'] = []
