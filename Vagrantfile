@@ -86,6 +86,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       },
       iptables_web: {
         server: {
+          force_ssl: true,
+          listen: ['80', '443 ssl'],
           # fqdn: '172.28.128.3',
           google: {
             key: '91199367367-isnbm000dii328s63tlk5h8niendtjr2.apps.googleusercontent.com',

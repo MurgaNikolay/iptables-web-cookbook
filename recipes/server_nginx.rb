@@ -9,10 +9,12 @@ template '/etc/nginx/sites-available/iptables_web' do
   group 'root'
   mode '754'
   variables(
-    :server_name => node['iptables_web']['server']['fqdn'],
-    :listen => node['iptables_web']['server']['listen'],
-    :backend => socket,
-    :root => File.join(node['iptables_web']['server']['deploy_to'], 'public')
+    server_name: node['iptables_web']['server']['fqdn'],
+    listen: node['iptables_web']['server']['listen'],
+    backend: socket,
+    root: File.join(node['iptables_web']['server']['deploy_to'], 'public'),
+    ssl_certificate: node['iptables_web']['server']['ssl_certificate'],
+    ssl_key: node['iptables_web']['server']['ssl_key'],
   )
   notifies :reload, 'service[nginx]'
 end

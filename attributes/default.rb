@@ -24,9 +24,9 @@ default['iptables_web']['server']['registration']['token'] = 'usertoken'
 #nginx
 default['iptables_web']['server']['fqdn'] = 'access.example.com'
 default['iptables_web']['server']['listen'] = '80'
-default['iptables_web']['server']['ssl'] = false
-# default['iptables_web']['server']['ssl'] = true
-# default['iptables_web']['server']['ssl'] = true
+default['iptables_web']['server']['force_ssl'] = false
+default['iptables_web']['server']['ssl_certificate'] = false
+default['iptables_web']['server']['ssl_key'] = false
 default['iptables_web']['server']['deploy_to'] = '/var/www/iptables-web'
 
 
