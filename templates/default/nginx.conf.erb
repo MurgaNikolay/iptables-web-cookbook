@@ -8,7 +8,7 @@ server {
   %>
   listen <%=listen%>;
   <% end %>
-  server_name server_name;
+  server_name <%=@server_name %>;
   location / {
     rewrite ^(.*)$ https://$host$1 permanent;
   }
@@ -29,6 +29,7 @@ server {
   <% if @error_log %>
   error_log  /var/log/nginx/<%= @error_log %>.log warn;
   <% end %>
+
   <% if @ssl_certificate %>
   ssl on;
   ssl_certificate        <%=@ssl_certificate %>;

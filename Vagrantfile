@@ -88,6 +88,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         server: {
           force_ssl: true,
           listen: ['80', '443 ssl'],
+          ssl_certificate: '/etc/ssl/certs/ssl-cert-snakeoil.pem',
+          ssl_key: '/etc/ssl/private/ssl-cert-snakeoil.key',
           # fqdn: '172.28.128.3',
           google: {
             key: '91199367367-isnbm000dii328s63tlk5h8niendtjr2.apps.googleusercontent.com',

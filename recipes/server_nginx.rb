@@ -15,6 +15,7 @@ template '/etc/nginx/sites-available/iptables_web' do
     root: File.join(node['iptables_web']['server']['deploy_to'], 'public'),
     ssl_certificate: node['iptables_web']['server']['ssl_certificate'],
     ssl_key: node['iptables_web']['server']['ssl_key'],
+    force_ssl: node['iptables_web']['server']['force_ssl']
   )
   notifies :reload, 'service[nginx]'
 end
