@@ -9,7 +9,7 @@ version          '0.3.1'
 
 depends          'mysql'
 depends          'database'
-depends          'ruby_rvm'
+depends          'chef_rvm'
 depends          'nginx'
 depends          'unicorn'
 depends          'sudo'

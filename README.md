@@ -25,7 +25,7 @@ TODO: List your supported platforms.
 
 ## Usage
 
-### iptables-web-cookbook::default
+#### iptables-web-cookbook::default
 
 Include `iptables-web-cookbook` in your node's `run_list`:
 

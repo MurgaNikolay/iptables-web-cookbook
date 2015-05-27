@@ -9,17 +9,17 @@
 
 extend IptablesWebHelpers
 _ruby_string = client_ruby_string
-ruby_rvm node['iptables_web']['client']['user'] do
+chef_rvm node['iptables_web']['client']['user'] do
   rubies _ruby_string
   action :install
 end
 
-ruby_rvm_gemset 'iptables_web:gemset' do
+chef_rvm_gemset 'iptables_web:gemset' do
   user node['iptables_web']['client']['user']
   ruby_string _ruby_string
 end
 
-ruby_rvm_gem 'iptables_web::gem::iptables_web' do
+chef_rvm_gem 'iptables_web::gem::iptables_web' do
   gem 'iptables-web'
   user node['iptables_web']['client']['user']
   ruby_string _ruby_string
