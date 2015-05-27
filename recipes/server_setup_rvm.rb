@@ -44,7 +44,7 @@ chef_rvm_execute 'iptables_web:unicorn:reload' do
   subscribes :run, 'chef_rvm_bash[iptables_web:install]'
   subscribes :run, 'template[iptables_web:config:database]'
   subscribes :run, 'template[iptables_web:config:settings]'
-  subscribes :run, 'chef_rvm_execute[iptables_web:unicorn:start]', :delayed
+  # subscribes :run, 'chef_rvm_execute[iptables_web:unicorn:start]', :delayed
   only_if "test -f #{pid}"
   action :nothing
 end
