@@ -4,7 +4,7 @@ maintainer_email 'nikolay.m@randrmusic.com'
 license          'All rights reserved'
 description      'Installs/Configures iptables-web-cookbook'
 long_description 'Installs/Configures iptables-web-cookbook'
-version          '0.4.0'
+version          '0.4.1'
 
 
 depends          'mysql'
