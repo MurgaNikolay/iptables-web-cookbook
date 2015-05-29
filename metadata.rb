@@ -7,9 +7,10 @@ long_description 'Installs/Configures iptables-web-cookbook'
 version          '0.4.1'
 
 
-depends          'mysql'
-depends          'database'
-depends          'chef_rvm'
+depends          'mysql', '~> 6.0'
+depends          'database', '~> 4.0'
+depends          'chef_rvm', '~> 1.0'
+depends          'mysql2_chef_gem', '~> 1.0'
 depends          'nginx'
 depends          'unicorn'
 depends          'sudo'

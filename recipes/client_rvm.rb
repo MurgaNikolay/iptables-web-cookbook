@@ -8,7 +8,7 @@
 #
 
 extend IptablesWebHelpers
-_ruby_string = client_ruby_string
+_ruby_string = ruby_string(:client)
 chef_rvm node['iptables_web']['client']['user'] do
   rubies _ruby_string
   action :install

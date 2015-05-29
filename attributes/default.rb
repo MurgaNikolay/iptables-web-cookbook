@@ -1,5 +1,6 @@
 default['iptables_web']['server']['repo'] = 'https://github.com/MurgaNikolay/iptables-web.git'
-default['iptables_web']['server']['revision'] = 'master'
+default['iptables_web']['server']['revision'] = 'HEAD'
+default['iptables_web']['server']['deploy_strategy'] = :revision
 default['iptables_web']['server']['rails_env'] = 'production'
 default['iptables_web']['server']['user'] = 'iptables_web'
 default['iptables_web']['server']['group'] = 'iptables_web'
@@ -30,12 +31,16 @@ default['iptables_web']['server']['ssl_key'] = false
 default['iptables_web']['server']['deploy_to'] = '/var/www/iptables-web'
 
 
-# default['iptables_web']['server']['ssl'] = true
-# default['iptables_web']['server']['ssl_cert'] = true
-# default['iptables_web']['server']['ssl_key'] = true
-
 #database
-default['iptables_web']['server']['database']['host'] = 'localhost'
+default['iptables_web']['server']['mysql']['initial_root_password'] = 'mysqldefaultrootpassword'
+default['iptables_web']['server']['mysql']['port'] = '3306'
+default['iptables_web']['server']['mysql']['bind_address'] = '127.0.0.1'
+default['iptables_web']['server']['mysql']['name'] = 'iptables_web'
+default['iptables_web']['server']['mysql']['link_to_default'] = true
+
+# application config
+
+default['iptables_web']['server']['database']['host'] = '127.0.0.1'
 default['iptables_web']['server']['database']['name'] = 'access'
 default['iptables_web']['server']['database']['username'] = 'access'
 default['iptables_web']['server']['database']['password'] = 'access'

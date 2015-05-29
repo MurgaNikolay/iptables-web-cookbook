@@ -1,31 +1,39 @@
 module IptablesWebHelpers
-  def server_ruby_string
+  def ruby_string(side)
     [
-      node['iptables_web']['server']['rvm']['ruby'],
-      node['iptables_web']['server']['rvm']['gemset']
+      node['iptables_web'][side]['rvm']['ruby'],
+      node['iptables_web'][side]['rvm']['gemset']
     ].join '@'
   end
 
-  def client_ruby_string
-    [
-      node['iptables_web']['client']['rvm']['ruby'],
-      node['iptables_web']['client']['rvm']['gemset']
-    ].join '@'
+  def rvm_command(side = :server, command)
+    return command unless rvm?(side)
+    "bash -l -c 'rvm #{ruby_string(side)} do #{command}'"
   end
 
-  def install_rvm
-    rvm node['iptables_web']['server']['user'] do
-      rubies _ruby_string
-      action :install
-    end
-
-    rvm_gemset 'iptables_web:gemset' do
-      user node['iptables_web']['server']['user']
-      ruby_string _ruby_string
-    end
+  def rvm?(side = :server)
+    node['iptables_web'][side]['install_method'] == 'rvm'
   end
 
-  def rvm_shell(ruby_string, command)
-    "bash -l -c 'rvm #{ruby_string} do #{command}'"
+  def rvm_env(side, env={})
+    {
+      'HOME' => "/home/#{node['iptables_web'][side]['user']}",
+      'USER' => node['iptables_web'][side]['user']
+    }.merge!(env)
+  end
+end
+
+class Chef
+  class Recipe
+    extend IptablesWebHelpers
+    include IptablesWebHelpers
+  end
+end
+
+class Chef
+  class Resource
+    class Deploy
+      include IptablesWebHelpers
+    end
   end
 end

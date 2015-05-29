@@ -1,12 +1,12 @@
 default: &default
-  google_client_id: <%=node['iptables_web']['server']['google']['key'] %>
-  google_client_secret: <%=node['iptables_web']['server']['google']['secret'] %>
+  google_client_id: <%=@google_key %>
+  google_client_secret: <%=@google_secret %>
   google_domains:
-    <% Array(node['iptables_web']['server']['google']['domains']).each do |domain| %>
+    <% Array(@google_domains).each do |domain| %>
     - <%=domain %>
     <% end %>
 <%-
-acl = Array(node['iptables_web']['server']['acl'])
+acl = Array(@acl)
 if acl.size > 0
 %>
   acl:
@@ -15,9 +15,9 @@ if acl.size > 0
     <% end %>
 <%- end %>
   api: #this is temporary solution for automatic node  registration via chef
-    key: <%=node['iptables_web']['server']['registration']['key'] %>
-    token: <%=node['iptables_web']['server']['registration']['token'] %>
-    user:  <%=node['iptables_web']['server']['registration']['user'] %>
+    key: <%=@registration_key %>
+    token: <%=@registration_token %>
+    user:  <%=@registration_user %>
 development:
   <<: *default
 
