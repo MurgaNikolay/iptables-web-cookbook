@@ -1,3 +1,4 @@
+default['iptables_web']['client']['version'] = '0.2.2.pre'
 default['iptables_web']['client']['user'] = 'iptables_web'
 default['iptables_web']['client']['group'] = 'iptables_web'
 

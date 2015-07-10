@@ -20,8 +20,9 @@ chef_rvm_gemset 'iptables_web:gemset' do
 end
 
 chef_rvm_gem 'iptables_web::gem::iptables_web' do
+  version node['iptables_web']['client']['version']
   gem 'iptables-web'
   user node['iptables_web']['client']['user']
   ruby_string _ruby_string
-  action [ :install, :update ]
+  action [ :install ]
 end

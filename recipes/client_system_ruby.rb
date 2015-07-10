@@ -7,4 +7,6 @@
 # All rights reserved - Do Not Redistribute
 #
 
-gem_package 'iptables_web'
+gem_package 'iptables_web' do
+  version version node['iptables_web']['client']['version']
+end
