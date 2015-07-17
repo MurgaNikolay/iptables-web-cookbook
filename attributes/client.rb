@@ -14,7 +14,7 @@ default['iptables_web']['client']['static_rules']['filter'] = [
   '-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT',
   '-A FORWARD -m state --state ESTABLISHED,RELATED -j ACCEPT',
   '-A INPUT -p icmp --icmp-type 8 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT',
-  '-A OUTPUT -p icmp --icmp-type 0 -m state --state ESTABLISHED,RELATED -j ACCEP'
+  '-A OUTPUT -p icmp --icmp-type 0 -m state --state ESTABLISHED,RELATED -j ACCEPT'
 ]
 
 default['iptables_web']['client']['server_base_url'] = nil
