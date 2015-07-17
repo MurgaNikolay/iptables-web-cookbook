@@ -79,11 +79,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :chef_solo do |chef|
     chef.log_level = :debug
     chef.json = {
-      mysql: {
-        server_root_password: 'rootpass',
-        server_debian_password: 'debpass',
-        server_repl_password: 'replpass'
-      },
       iptables_web: {
         server: {
           force_ssl: true,
@@ -92,18 +87,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           ssl_key: '/etc/ssl/private/ssl-cert-snakeoil.key',
           # fqdn: '172.28.128.3',
           google: {
-            key: '91199367367-isnbm000dii328s63tlk5h8niendtjr2.apps.googleusercontent.com',
-            secret: '_cI_NqKLd4ipt4tkk7wwdj3a',
+            key: '91199367367-euc5ehumoifa2dblsdg40u7phddjjrnt.apps.googleusercontent.com',
+            secret: 'lopb-84-c6k5htgI-9syT3ZG',
             domains: %w(randrmusic.com tunehog.com example.com)
           }
         }
       }
     }
     chef.run_list = %w(
-      recipe[mysql::server]
-      recipe[database::mysql]
+      recipe[iptables_web::server_mysql_service]
       recipe[iptables_web::server]
-
     )
   end
 end

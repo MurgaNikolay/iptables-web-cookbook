@@ -5,7 +5,6 @@ include IptablesWebClientHelpers
 use_inline_resources
 
 action :configure do
-
   template ::File.join(new_resource.config_dir, 'static_rules') do
     source 'static_rules.erb'
     variables(static_rules: new_resource.static_rules)
