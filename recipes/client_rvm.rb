@@ -7,6 +7,9 @@
 # All rights reserved - Do Not Redistribute
 #
 
+include_recipe 'apt'
+include_recipe 'chef_rvm'
+
 extend IptablesWebHelpers
 _ruby_string = ruby_string(:client)
 chef_rvm node['iptables_web']['client']['user'] do

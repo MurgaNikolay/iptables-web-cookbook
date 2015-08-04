@@ -1,4 +1,3 @@
-
 #database
 mysql = node['iptables_web']['server']['mysql']
 
@@ -9,10 +8,14 @@ mysql_service mysql['name'] do
   action [:create, :start]
 end
 
+directory '/var/run/mysqld' do
+  only_if { !!mysql['link_to_default'] }
+end
+
 link '/var/run/mysqld/mysqld.sock' do
   to "/var/run/mysql-#{mysql['name']}/mysqld.sock"
-end if mysql['link_to_default']
-
+  only_if { !!mysql['link_to_default'] }
+end
 
 mysql_client mysql['name'] do
   action :create

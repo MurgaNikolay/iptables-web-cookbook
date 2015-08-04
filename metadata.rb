@@ -6,7 +6,7 @@ description      'Installs/Configures iptables-web-cookbook'
 long_description 'Installs/Configures iptables-web-cookbook'
 version          '0.4.5'
 
-
+depends          'build-essential'
 depends          'mysql', '~> 6.0'
 depends          'database', '~> 4.0'
 depends          'chef_rvm', '~> 1.0'

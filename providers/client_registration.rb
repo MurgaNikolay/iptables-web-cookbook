@@ -1,31 +1,24 @@
 def whyrun_supported?
   true
 end
+
 include IptablesWebClientHelpers
 include Chef::DSL::IncludeRecipe
 use_inline_resources
 
 action :register do
   require 'rest_client'
-  if Chef::Config['solo']
-    if node['iptables_web']['server']['fqdn']
-      server_node = node
-    else
-      Chef::Log.warn('This recipe uses search. Chef Solo does not support search.')
-      Chef::Log.warn("If you did not set node['zabbix']['web']['fqdn'], the recipe will fail")
-      return
-    end
-  else
-    server_node = search(:node, 'recipe:iptables_web\:\:server OR recipes:iptables_web\:\:server').first
-  end
+  server_node = search(:node, 'recipe:iptables_web\:\:server OR recipes:iptables_web\:\:server').first
 
-  server_base_url = server_node['iptables_web']['server']['ssl'] ? 'https://' : 'http://'
+  server_base_url = (server_node['iptables_web']['server']['force_ssl'] || server_node['iptables_web']['server']['ssl_key']) ? 'https://' : 'http://'
   server_base_url << server_node['iptables_web']['server']['fqdn']
-  server = ::File.join(server_base_url, 'api', 'registration.json')
-  Chef::Log.info "Register node #{new_resource.name} on #{server}"
+  registration_url = ::File.join(server_base_url, 'api', 'registration.json')
+  Chef::Log.info "Register node #{new_resource.name} on #{registration_url}"
 
-  result = RestClient.post(server,
-    {
+  result = RestClient::Request.execute(
+    method: :post,
+    url: registration_url,
+    payload: {
       node: {
         name: new_resource.name,
         security_groups: new_resource.security_groups,
@@ -33,13 +26,16 @@ action :register do
         groups_access_rules: new_resource.groups_access_rules
       }
     }.to_json,
-    {
+    headers: {
       content_type: :json,
       accept: :json,
       'X-Authentication-Key' => server_node['iptables_web']['server']['registration']['key'],
       'X-Authentication-Token' => server_node['iptables_web']['server']['registration']['token']
-    }
+    },
+    verify_ssl: false
   )
+
+
   responce = JSON.parse(result.body)
   # Store access token to node
   new_resource.client_node.normal['iptables_web']['client']['server_base_url'] = server_base_url

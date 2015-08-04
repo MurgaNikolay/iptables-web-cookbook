@@ -32,7 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # via the IP. Host-only networks can talk to the host machine as well as
   # any other machines on the same network, but cannot be accessed (through this
   # network interface) by any external networks.
-  config.vm.network :private_network, type: 'dhcp', ip: '192.168.23.10'
+  # config.vm.network :private_network, type: 'dhcp', ip: '192.168.23.10'
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -42,12 +42,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  # config.vm.synced_folder "../data", "/vagrant_data"
+  config.vm.synced_folder '/Users/nikolay/Projects/iptables-web', '/iptables_web_repo'
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
+  config.trigger.before :reload, stdout: true do
+    puts "Remove 'synced_folders' file for #{@machine.name}"
+    `rm .vagrant/machines/#{@machine.name}/virtualbox/synced_folders`
+  end
   config.vm.provider :virtualbox do |vb|
     vb.cpus = 2
     # Don't boot with headless mode
@@ -75,28 +79,72 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # An array of symbols representing groups of cookbook described in the Vagrantfile
   # to skip installing and copying to Vagrant's shelf.
   # config.berkshelf.except = []
+  if Vagrant.has_plugin?('vagrant-hostmanager')
+    config.hostmanager.enabled = true
+    config.hostmanager.manage_host = true
+    config.hostmanager.ignore_private_ip = false
+    config.vm.provision :hostmanager
+  end
 
-  config.vm.provision :chef_solo do |chef|
-    chef.log_level = :debug
-    chef.json = {
-      iptables_web: {
-        server: {
-          force_ssl: true,
-          listen: ['80', '443 ssl'],
-          ssl_certificate: '/etc/ssl/certs/ssl-cert-snakeoil.pem',
-          ssl_key: '/etc/ssl/private/ssl-cert-snakeoil.key',
-          # fqdn: '172.28.128.3',
-          google: {
-            key: '91199367367-euc5ehumoifa2dblsdg40u7phddjjrnt.apps.googleusercontent.com',
-            secret: 'lopb-84-c6k5htgI-9syT3ZG',
-            domains: %w(randrmusic.com tunehog.com example.com)
+  # HA
+  config.vm.define 'server' do |es|
+    es.vm.hostname = 'iptables-server'
+    es.vm.network :private_network, ip: '35.35.35.31'
+    es.hostmanager.aliases = %w(iptables-server.dev) if Vagrant.has_plugin?('vagrant-hostmanager')
+
+    es.vm.provision :chef_zero do |chef|
+      # puts attrs
+      chef.cookbooks_path = 'cookbooks'
+      chef.nodes_path = 'fixtures/nodes'
+      chef.json = {
+        iptables_web: {
+          server: {
+            repo: 'file:////iptables_web_repo',
+            force_ssl: true,
+            listen: ['80', '443 ssl'],
+            ssl_certificate: '/etc/ssl/certs/ssl-cert-snakeoil.pem',
+            ssl_key: '/etc/ssl/private/ssl-cert-snakeoil.key',
+            fqdn: 'iptables-server.dev',
+            google: {
+              key: ENV['IPTABLES_WEB_GKEY'],
+              secret: ENV['IPTABLES_WEB_GSECRET'],
+              domains: %w(iptables-server.dev)
+            }
           }
         }
       }
-    }
-    chef.run_list = %w(
-      recipe[iptables_web::server_mysql_service]
-      recipe[iptables_web::server]
-    )
+      chef.log_level = :debug
+      chef.run_list = [
+        'iptables_web::server_mysql_service',
+        'iptables_web::server'
+      ]
+    end
+  end
+
+  config.vm.define "client" do |es|
+    es.vm.hostname = 'iptables-client'
+    es.vm.network :private_network, ip: '35.35.35.32'
+    es.hostmanager.aliases = %w(iptables-client.dev) if Vagrant.has_plugin?('vagrant-hostmanager')
+    es.vm.provision :chef_zero do |chef|
+      # puts attrs
+      chef.log_level = :debug
+      chef.cookbooks_path = 'cookbooks'
+      chef.nodes_path = 'fixtures/nodes'
+      chef.json = {
+        'build-essential' => {
+          compile_time: true,
+        },
+        iptables_web: {
+          client: {
+
+          }
+        }
+      }
+      chef.run_list = [
+        'iptables_web::client',
+        'iptables_web::client_register',
+        'iptables_web::client_configuration'
+      ]
+    end
   end
 end
