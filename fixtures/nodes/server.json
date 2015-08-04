@@ -1,0 +1,20 @@
+{
+  "name": "iptables_web_server",
+  "chef_environment": "_default",
+  "normal": {
+    "iptables_web": {
+      "server": {
+        "fqdn": "iptables-server.dev",
+        "force_ssl": true,
+        "registration": {
+          "key": "userkey",
+          "token": "usertoken",
+          "user": "user@forregistration.com"
+        }
+      }
+    }
+  },
+  "run_list": [
+    "iptables_web::server"
+  ]
+}

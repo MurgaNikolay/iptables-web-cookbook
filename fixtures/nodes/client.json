@@ -1,0 +1,14 @@
+{
+  "name": "iptables_web_client",
+  "chef_environment": "_default",
+  "normal": {
+    "iptables_web": {
+      "client": {
+
+      }
+    }
+  },
+  "run_list": [
+    "iptables_web::client"
+  ]
+}
