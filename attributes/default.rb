@@ -1,5 +1,5 @@
 default['iptables_web']['server']['repo'] = 'https://github.com/MurgaNikolay/iptables-web.git'
-default['iptables_web']['server']['revision'] = 'HEAD'
+default['iptables_web']['server']['revision'] = 'v0.3.1'
 default['iptables_web']['server']['deploy_strategy'] = :revision
 default['iptables_web']['server']['rails_env'] = 'production'
 default['iptables_web']['server']['user'] = 'iptables_web'
