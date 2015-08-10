@@ -1,3 +1,4 @@
-# 0.1.0
+# 0.4.7
 
-Initial release of iptables-web-cookbook
+- Update client and server versions
+ 
