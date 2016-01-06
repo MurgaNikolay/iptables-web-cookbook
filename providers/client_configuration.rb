@@ -1,6 +1,7 @@
 def whyrun_supported?
   true
 end
+
 include IptablesWebClientHelpers
 use_inline_resources
 
@@ -19,9 +20,10 @@ action :configure do
     group new_resource.group
     mode '0600'
     variables ({
-        base_url: new_resource.base_url,
-        access_token: new_resource.access_token
-      })
+      base_url: new_resource.base_url,
+      access_token: new_resource.access_token,
+      log_level: new_resource.log_level,
+    })
   end
 
   cron 'iptables_web' do

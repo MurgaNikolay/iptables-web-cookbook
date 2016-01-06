@@ -107,7 +107,7 @@ deploy node['iptables_web']['server']['deploy_to'] do
       'tmp/pids' => 'tmp/pids',
       'tmp/sockets' => 'tmp/sockets'
     })
-  shallow_clone true
+  shallow_clone false
   migrate true
   migration_command([
       rvm_command(:server, 'bundle install'),

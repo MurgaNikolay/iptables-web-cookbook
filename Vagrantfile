@@ -25,7 +25,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Every Vagrant virtual environment requires a box to build off of.
   # If this value is a shorthand to a box in Vagrant Cloud then
   # config.vm.box_url doesn't need to be specified.
-  config.vm.box = 'chef/ubuntu-14.04'
+  config.vm.box = 'bento/ubuntu-14.04'
 
 
   # Assign this VM to a host-only network IP, allowing you to access it
@@ -42,7 +42,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  config.vm.synced_folder '/Users/nikolay/Projects/iptables-web', '/iptables_web_repo'
+  config.vm.synced_folder File.realpath('../api'), '/iptables_web_repo' #, owner: 'iptables_web', group: 'iptables_web'
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -66,7 +66,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # The path to the Berksfile to use with Vagrant Berkshelf
   config.berkshelf.berksfile_path = "./Berksfile"
-
 
   # Enabling the Berkshelf plugin. To enable this globally, add this configuration
   # option to your ~/.vagrant.d/Vagrantfile file
@@ -113,7 +112,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           }
         }
       }
-      chef.log_level = :debug
+      chef.log_level = :info
       chef.run_list = [
         'iptables_web::server_mysql_service',
         'iptables_web::server'
@@ -127,7 +126,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     es.hostmanager.aliases = %w(iptables-client.dev) if Vagrant.has_plugin?('vagrant-hostmanager')
     es.vm.provision :chef_zero do |chef|
       # puts attrs
-      chef.log_level = :debug
+      chef.log_level = :info
       chef.cookbooks_path = 'cookbooks'
       chef.nodes_path = 'fixtures/nodes'
       chef.json = {

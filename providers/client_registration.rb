@@ -9,11 +9,17 @@ use_inline_resources
 action :register do
   require 'rest_client'
   server_node = search(:node, 'recipe:iptables_web\:\:server OR recipes:iptables_web\:\:server').first
-
   server_base_url = (server_node['iptables_web']['server']['force_ssl'] || server_node['iptables_web']['server']['ssl_key']) ? 'https://' : 'http://'
   server_base_url << server_node['iptables_web']['server']['fqdn']
   registration_url = ::File.join(server_base_url, 'api', 'registration.json')
   Chef::Log.info "Register node #{new_resource.name} on #{registration_url}"
+
+  puts({
+    content_type: :json,
+    accept: :json,
+    'X-Authentication-Key' => server_node['iptables_web']['server']['registration']['key'],
+    'X-Authentication-Token' => server_node['iptables_web']['server']['registration']['token']
+  })
 
   result = RestClient::Request.execute(
     method: :post,

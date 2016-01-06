@@ -18,9 +18,11 @@ default['iptables_web']['client']['static_rules']['filter'] = [
   '-A OUTPUT -p icmp --icmp-type 0 -m state --state ESTABLISHED,RELATED -j ACCEPT'
 ]
 
-default['iptables_web']['client']['server_base_url'] = nil
-default['iptables_web']['client']['access_token'] = nil
 default['iptables_web']['client']['registration']['server_tag'] = 'production'
 default['iptables_web']['client']['registration']['access_rules'] = []
 default['iptables_web']['client']['registration']['groups_access_rules'] = []
 default['iptables_web']['client']['registration']['security_groups'] = []
+
+default['iptables_web']['client']['server_base_url'] = nil
+default['iptables_web']['client']['access_token'] = nil
+default['iptables_web']['client']['access_token'] = nil
