@@ -1,7 +1,7 @@
 include_recipe 'build-essential'
 include_recipe 'iptables_web::client_user'
-if node['iptables_web']['client']['install_method'] == 'rvm'
-  include_recipe "iptables_web::client_rvm"
-else
-  include_recipe 'iptables_web::client_system_ruby'
+
+package 'ruby1.9.3'
+gem_package 'iptables-web' do
+  version version node['iptables_web']['client']['version']
 end

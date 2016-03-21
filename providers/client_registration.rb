@@ -2,13 +2,17 @@ def whyrun_supported?
   true
 end
 
-include IptablesWebClientHelpers
 include Chef::DSL::IncludeRecipe
 use_inline_resources
 
 action :register do
   require 'rest_client'
-  server_node = search(:node, 'recipe:iptables_web\:\:server OR recipes:iptables_web\:\:server').first
+  if Chef::Config[:solo]
+    server_node = search(:node, 'recipe:iptables_web\:\:server OR recipes:iptables_web\:\:server').first
+  else
+    Chef::Log.warn('This recipe uses search. Chef Solo does not support search.')
+    return false
+  end
   server_base_url = (server_node['iptables_web']['server']['force_ssl'] || server_node['iptables_web']['server']['ssl_key']) ? 'https://' : 'http://'
   server_base_url << server_node['iptables_web']['server']['fqdn']
   registration_url = ::File.join(server_base_url, 'api', 'registration.json')

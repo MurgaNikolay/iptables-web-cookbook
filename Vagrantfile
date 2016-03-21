@@ -121,8 +121,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.define "client" do |es|
-    es.vm.hostname = 'iptables-client'
-    es.vm.network :private_network, ip: '35.35.35.32'
     es.hostmanager.aliases = %w(iptables-client.dev) if Vagrant.has_plugin?('vagrant-hostmanager')
     es.vm.provision :chef_zero do |chef|
       # puts attrs
@@ -135,13 +133,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         },
         iptables_web: {
           client: {
-
+            server_base_url: 'https://iptables-web.vocvox.com/',
+            access_token: '5fcdee37-8a7c1ebf-d70b81aa-66b420be'
           }
         }
       }
       chef.run_list = [
         'iptables_web::client',
-        'iptables_web::client_register',
+        # 'iptables_web::client_register',
         'iptables_web::client_configuration'
       ]
     end
