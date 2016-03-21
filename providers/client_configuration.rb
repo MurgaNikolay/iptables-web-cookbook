@@ -42,7 +42,7 @@ action :configure do
     action :create
     user new_resource.user
     # home new_resource.user_home
-    command 'iptables-web'
+    command '/usr/local/bin/iptables-web'
   end
 end
 
